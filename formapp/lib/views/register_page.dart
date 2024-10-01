@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:formapp/controllers/authentication.dart';
 import 'package:formapp/views/login_page.dart';
 import 'package:formapp/views/widgets/input_widget.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,9 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  final AuthenticationController _authenticationController =
+      Get.put(AuthenticationController());
 
   @override
   Widget build(BuildContext context) {
@@ -65,21 +69,30 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(
                 height: 30,
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 15)),
-                onPressed: () {
-                  Get.to(() => const LoginPage());
-                },
-                child: const Text(
-                  'Register',
-                  style: TextStyle(fontSize: 18 * 0.90),
-                ),
-              ),
+              Obx(() {
+                return _authenticationController.isLoading.value
+                    ? const CircularProgressIndicator()
+                    : ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 50, vertical: 15)),
+                        onPressed: () async {
+                          await _authenticationController.regsiter(
+                              name: _nameController.text.trim(),
+                              username: _usernameController.text.trim(),
+                              email: _emailController.text.trim(),
+                              password: _passwordController.text.trim()
+                              );
+                        },
+                        child: const Text(
+                          'Register',
+                          style: TextStyle(fontSize: 18 * 0.90),
+                        ),
+                      );
+              }),
               const SizedBox(
                 height: 10,
               ),
