@@ -69,10 +69,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(
                 height: 30,
               ),
-              Obx(() {
-                return _authenticationController.isLoading.value
-                    ? const CircularProgressIndicator()
-                    : ElevatedButton(
+                      ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.black,
                             foregroundColor: Colors.white,
@@ -87,12 +84,19 @@ class _RegisterPageState extends State<RegisterPage> {
                               password: _passwordController.text.trim()
                               );
                         },
-                        child: const Text(
-                          'Register',
-                          style: TextStyle(fontSize: 18 * 0.90),
+                        child: Obx((){
+                            return _authenticationController.isLoading.value ?
+                            const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ) : const Text(
+                              'Register',
+                              style: TextStyle(fontSize: 18 * 0.90),
+                            );
+                          }
                         ),
-                      );
-              }),
+                      ),
               const SizedBox(
                 height: 10,
               ),
