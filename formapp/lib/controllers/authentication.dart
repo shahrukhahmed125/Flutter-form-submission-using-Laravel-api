@@ -25,7 +25,7 @@ class AuthenticationController extends GetxController {
       };
 
       var response = await http.post(
-        Uri.parse(url + 'register'),
+        Uri.parse('${url}register'),
         headers: {
           'Accept': 'application/json',
         },
