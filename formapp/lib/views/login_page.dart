@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:formapp/controllers/authentication.dart';
 import 'package:formapp/views/register_page.dart';
 import 'package:formapp/views/widgets/input_widget.dart';
 import 'package:get/get.dart';
@@ -11,8 +12,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final AuthenticationController _authenticationController = Get.put(AuthenticationController());
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +34,9 @@ class _LoginPageState extends State<LoginPage> {
                 height: 30,
               ),
               InputWidget(
-                hintText: 'Email',
+                hintText: 'Username',
                 obscureText: false,
-                controller: _emailController,
+                controller: _usernameController,
               ),
               const SizedBox(
                 height: 20,
@@ -54,10 +56,23 @@ class _LoginPageState extends State<LoginPage> {
                     elevation: 0,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 50, vertical: 15)),
-                onPressed: () {},
-                child: const Text(
-                  'Login',
-                  style: TextStyle(fontSize: 18 * 0.90),
+                onPressed: () async {
+                  await _authenticationController.login(
+                      username: _usernameController.text.trim(),
+                      password: _passwordController.text.trim(),
+                    );
+                },
+                child: Obx((){
+                    return _authenticationController.isLoading.value ?
+                    const CircularProgressIndicator(
+                      color: Colors.white,
+                    ): 
+
+                    const Text(
+                      'Login',
+                      style: TextStyle(fontSize: 18 * 0.90),
+                    );
+                  }
                 ),
               ),
               const SizedBox(
